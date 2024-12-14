@@ -14,13 +14,13 @@ def TaskDB_conn():
     conn.row_factory = sqlite3.Row
     return conn
 
-# @app.after_request #enhancement of Content Security Policy
-# def apply_csp_header(resp):
-    # resp.headers['Content-Security-Policy'] = ( "default-src 'self'; " "img-src 'self' data:; " "font-src 'self'" )
-    # resp.headers['X-XSS-Protection'] = '1; mode=block' # XSS security if using an older browsers)
-    # resp.headers['X-Frame-Options'] = 'DENY' #protect against clickjacking
-    # resp.headers['X-Content-Type-Options'] = 'nosniff' # protect against sniffing
-    # return resp
+@app.after_request #enhancement of Content Security Policy
+def apply_csp_header(resp):
+    resp.headers['Content-Security-Policy'] = ( "default-src 'self'; " "img-src 'self' data:; " "font-src 'self'" )
+    resp.headers['X-XSS-Protection'] = '1; mode=block' # XSS security if using an older browsers)
+    resp.headers['X-Frame-Options'] = 'DENY' #protect against clickjacking
+    resp.headers['X-Content-Type-Options'] = 'nosniff' # protect against sniffing
+    return resp
 
 @app.route('/')
 @app.route('/homepage', methods=['GET', 'POST'])
