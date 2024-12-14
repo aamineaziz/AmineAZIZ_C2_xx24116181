@@ -80,17 +80,24 @@ def iPlanner():
     
     return render_template('iPlanner.html', user=user, contents=contents)
     
-@app.route('/iplanner', methods=['GET'])
-def deleteTask():
+@app.route('/newTask/<int:id>', methods=['GET', 'POST'])
+def newTask(id):
     conn = TaskDB_conn()
     cursor = conn.cursor()
     
-    if request.method == 'GET':
-        theId = request.form.get('ListTask')
-        cursor.execute('DELETE FROM Tasks WHERE id = ?', (theId,))
+    if request.method == 'POST':
+        newTask = request.form.get('ListTask')
+        cursor.execute('UPDATE Tasks SET content = ? WHERE id = ?', (newTask,id,))
         conn.commit()
         conn.close()
-        return redirect(url_for('iPlanner.html'))
+        return redirect(url_for('iPlanner'))
+    conn = TaskDB_conn()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM Tasks WHERE id = ?',(id,))
+    contents = cursor.fetchone()
+    conn.close()
+    return render_template('newTask.html', contents=contents)
+
 if __name__ == '__main__':
     # init_db()
     app.run(debug=True, port=5000)

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to iPlanner</title>
+    <link rel="stylesheet" href="/static/style.css"> 
+</head>
+<body>
+<section>
+   <div class="updateTask">
+		<div class="content"> 
+		<form action="/updateTask/{{ contents['id'] }}" method="post">
+			<div class="form"> 
+			<label for="text">Update the task : {{ task['id'] }}</label>
+						<div class="inputBox"> 
+							<input type="text" name="ListTask"> <i>Update Todo...</i>
+						</div>
+								<div class="inputBox"> 
+						<button type="submit">SAVE</button>
+					</div>
+			</div> 
+		</form>
+		</div> 
+   </div> 
+  </section>
+</body>
+</html>

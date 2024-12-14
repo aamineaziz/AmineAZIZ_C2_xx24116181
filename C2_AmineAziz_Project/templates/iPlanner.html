@@ -18,17 +18,7 @@
 								<div class="inputBox"> 
 						<button type="submit">ADD</button>
 					</div>
-					<div class="inputBox"> 
-						<input type="submit" value="Edit"> 
-					</div>
 				</div>
-			</form>
-			<form action="/deleteTask" method="get">
-				<div class="form">
-				<div class="inputBox"> 
-							<button class="text-center" type="submit">DELETE</button>
-						</div>
-			</div>
 			</form>
 			
 			{% if text %}
@@ -38,7 +28,10 @@
 				<h3>List</h3>
 				<ul>
 					{% for content in contents %} 
-						<li>Task number : {{ content['id'] }} > {{ content['content'] }}</li>
+						<li>
+						Task number : {{ content['id'] }} > {{ content['content'] }}
+						<a href="{{ url_for('newTask', id=content['id']) }}" class="button">Update</a>
+					</li>
 					{% endfor %}
 				</ul>
 				
