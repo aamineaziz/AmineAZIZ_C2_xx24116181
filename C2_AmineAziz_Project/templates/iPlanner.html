@@ -12,7 +12,7 @@
 			<h2>{{ user }}'s iPlanner</h2><br>
 			<div class="form">
 			<form action="/iPlanner" method="post">
-				
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
 					<label for="text">Start Planning!</label>
 						<div class="inputBox"> 
 							<input type="text" name="ListTask"> <i>Add Todo...</i>
@@ -23,6 +23,7 @@
 					</div>
 			</form>
 			<form action="/deleteAllTasks" method="get">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
 				<div class="form">
 					<div class="inputBox1"> 
 						<button type="submit">Delete All</button>

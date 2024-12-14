@@ -13,6 +13,7 @@
 		<p style="color:red;">{{ error }}</p>
 		{% endif %}		
 		<form action="/" method="post">
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
 			<div class="form"> 
 			<div class="inputBox"> 
 				<input type="text" name="username" required> <i>Username</i>

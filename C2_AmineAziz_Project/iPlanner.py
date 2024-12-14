@@ -1,19 +1,26 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for, make_response
+from flask_wtf.csrf import CSRFProtect
 from markupsafe import escape
 import sqlite3
 
+csrf = CSRFProtect() #putting in place CSRFProtect
 app = Flask(__name__)
 app.secret_key = 'x1x2x3x4'
+csrf.init_app(app)
+
 
 def TaskDB_conn(): 
     conn = sqlite3.connect('TaskListDB.db', timeout=10.0)
     conn.row_factory = sqlite3.Row
     return conn
 
-@app.after_request #enhancement of Content Security Policy
-def apply_csp(resp):
-    response.headers['Content-Security-Policy'] = ( "default-src 'self'; " "img-src 'self' data:; " "font-src 'self'" )
-    return resp
+# @app.after_request #enhancement of Content Security Policy
+# def apply_csp_header(resp):
+    # resp.headers['Content-Security-Policy'] = ( "default-src 'self'; " "img-src 'self' data:; " "font-src 'self'" )
+    # resp.headers['X-XSS-Protection'] = '1; mode=block' # XSS security if using an older browsers)
+    # resp.headers['X-Frame-Options'] = 'DENY' #protect against clickjacking
+    # resp.headers['X-Content-Type-Options'] = 'nosniff' # protect against sniffing
+    # return resp
 
 @app.route('/')
 @app.route('/homepage', methods=['GET', 'POST'])
@@ -22,19 +29,6 @@ def index():
     
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    # if request.method == 'POST':
-        # username = request.form['username']
-        # password = request.form['password']
-        # conn = TaskDB_conn()
-        # cursor = conn.cursor()
-        # cursor.execute('SELECT * FROM Users WHERE username = ? AND password = ?', (username, password))
-        # if not cursor.fetchone():
-            # return render_template('homepage.html')
-        # else:
-            # return render_template('iPlanner.html', name = username)
-    # else:
-        # request.method == 'GET':
-        # return render_template('homepage.html')
     error = None    
     if request.method == 'POST':
         username = request.form['username']
@@ -76,7 +70,6 @@ def iPlanner():
     cursor.execute('SELECT id, content FROM Tasks ORDER BY id DESC;')
     contents = cursor.fetchall()
     conn.close()
-    
     return render_template('iPlanner.html', user=user, contents=contents)
     
 @app.route('/newTask/<int:id>', methods=['GET', 'POST'])
