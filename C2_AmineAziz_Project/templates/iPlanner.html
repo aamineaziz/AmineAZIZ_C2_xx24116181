@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+
 <section>
 	<div class="iplanner"> 
 		<div class="content">
@@ -28,8 +29,7 @@
 					</div>
 				</div>
 			</form>
-			</div>
-			
+			</div>			
 			{% if text %}
 				<h3>Your ToDo List</h3>
 				<p>{{text}}</p>
@@ -44,13 +44,10 @@
 					</li>
 					{% endfor %}
 				</ul>
-				
-				
-			
 		</div> 
 	</div> 
  </section>
-	
+<a href="{{ url_for('logout') }}" class="logout-button">Logout</a>	
 		<!-- <script>
 		function addline() {
   const TText = document.getElementByName("Tinput").value;

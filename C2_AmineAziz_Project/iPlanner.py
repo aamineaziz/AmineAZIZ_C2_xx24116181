@@ -116,6 +116,12 @@ def deleteAllTasks():
     conn.commit()
     conn.close()
     return redirect(url_for('iPlanner'))
+    
+@app.route('/logout')
+def logout():
+    resp = make_response(redirect(url_for('login')))
+    resp.set_cookie('user', expires=0)
+    return resp
 
 if __name__ == '__main__':
     # init_db()
