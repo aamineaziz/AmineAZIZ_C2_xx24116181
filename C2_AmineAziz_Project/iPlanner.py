@@ -98,6 +98,25 @@ def newTask(id):
     conn.close()
     return render_template('newTask.html', contents=contents)
 
+
+@app.route('/deleteTask/<int:id>', methods=['GET', 'POST'])
+def deleteTask(id):
+    conn = TaskDB_conn()
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM Tasks WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('iPlanner'))
+    
+@app.route('/deleteAllTasks', methods=['GET', 'POST'])
+def deleteAllTasks():
+    conn = TaskDB_conn()
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM Tasks')
+    conn.commit()
+    conn.close()
+    return redirect(url_for('iPlanner'))
+
 if __name__ == '__main__':
     # init_db()
     app.run(debug=True, port=5000)

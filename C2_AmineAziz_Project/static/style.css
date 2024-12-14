@@ -118,6 +118,14 @@ section .signin .content .form
 {
   width: 100%;
   display: flex;
+    align-items: center;
+  flex-direction: column;
+  gap: 25px;
+}
+section .iplanner .content .form 
+{
+  width: 100%;
+  display: flex;
   flex-direction: column;
   gap: 25px;
 }
@@ -129,8 +137,10 @@ section .iplanner .content .form .inputBox
 section .iplanner .content .form .inputBox button{
 	padding: 10px 20px;
 	background-color: #0f0;
+	align-items: center;
 	font-style: bold;	
 	color: black;
+	position:center;
 	width: 100%;
 	font-weight: 500;
 	border: none;
@@ -143,6 +153,34 @@ section .iplanner .content .form .inputBox
   position: relative;
   width: 100%;
 }
+
+section .iplanner .content .form .inputBox1 button{
+	padding: 10px 20px;
+	background-color: #fff;
+	font-style: bold;
+	align-items: center;
+	color: black;
+	font-weight: 500;
+	width: 100%;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 1em;
+}
+section .iplanner .content .form .inputBox1 button:hover {
+	background-color: #c40411;
+	color: white;
+	}
+section .iplanner .content .form .inputBox button:hover {
+	background-color: #00c700;
+	}
+section .iplanner .content .form .inputBox1
+{
+  position: relative;
+  width: 100%;
+}
+
+
 section .signin .content .form .inputBox
 {
   position: relative;
@@ -247,6 +285,16 @@ section .iplanner .content .form .inputBox i
   transition: 0.5s;
   pointer-events: none;
 }
+section .iplanner .content .form .inputBox1 i 
+{
+  position: absolute;
+  left: 0;
+  padding: 15px 10px;
+  font-style: normal;
+  color: #aaa;
+  transition: 0.5s;
+  pointer-events: none;
+}
 .iplanner .content .form .inputBox input:focus ~ i,
 .iplanner .content .form .inputBox input:valid ~ i
 {
@@ -271,7 +319,8 @@ section .iplanner .content .form .inputBox i
   color: #0f0;
   font-weight: 600;
 }
-.iplanner .content .form .inputBox input[type="submit"]
+.iplanner .content .form .inputBox input[type="submit"],
+.iplanner .content .form .inputBox1 input[type="submit"]
 {
   padding: 10px;
   background: #0f0;
@@ -282,20 +331,6 @@ section .iplanner .content .form .inputBox i
   cursor: pointer;
 }
 input[type="submit"]:active
-{
-  opacity: 0.6;
-}
-.iplanner .content .form .inputBox input[type="reset"]
-{
-  padding: 10px;
-  background: #000;
-  color: #aaa;
-  font-weight: 600;
-  font-size: 1.35em;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-}
-input[type="reset"]:active
 {
   opacity: 0.6;
 }
