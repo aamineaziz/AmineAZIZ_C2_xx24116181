@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for, make_response
+from html import escape
 import sqlite3
 
 app = Flask(__name__)
@@ -52,14 +53,15 @@ def login():
 def iPlanner():
     user = request.cookies.get('securedcookie_step1')
     task = request.form.get('ListTask')
+    secured_task=escape(task) #sanitized
     if not user:
         return redirect(url_for('login'))
         
     if request.method == 'POST':
-        if task:
+        if secured_task:
             conn = TaskDB_conn()
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO Tasks (content) VALUES (?)', (task,))
+            cursor.execute('INSERT INTO Tasks (content) VALUES (?)', (secured_task,))
             conn.commit()
             conn.close()
     conn = TaskDB_conn()
@@ -77,7 +79,8 @@ def newTask(id):
     
     if request.method == 'POST':
         newTask = request.form.get('ListTask')
-        cursor.execute('UPDATE Tasks SET content = ? WHERE id = ?', (newTask,id,))
+        secured_newtask=escape(newTask) #sanitized
+        cursor.execute('UPDATE Tasks SET content = ? WHERE id = ?', (secured_newtask,id,))
         conn.commit()
         conn.close()
         return redirect(url_for('iPlanner'))
