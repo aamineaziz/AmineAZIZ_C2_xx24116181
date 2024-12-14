@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to iPlanner</title>
+    <link rel="stylesheet" href="/static/style.css"> 
+</head>
+<body>
+<section>
+   <div class="signin"> 
+		<div class="content"> 
+		<h2>iPlanner</h2>
+		{% if error %} 
+		<p style="color:red;">{{ error }}</p>
+		{% endif %}		
+		<form action="/" method="post">
+			<div class="form"> 
+			<div class="inputBox"> 
+				<input type="text" name="username" required> <i>Username</i>
+			</div> 
+			<div class="inputBox"> 
+				<input type="password" name="password" required> <i>Password</i> 
+			</div> 
+			<div class="inputBox"> 
+				<input type="submit" value="Login"> 
+			</div> 
+			<div class="inputBox"> 
+				<input type="reset" value="Cancel"> 
+			</div>
+			</div> 
+		</form>
+		</div> 
+   </div> 
+  </section>
+</body>
+</html>
+
+
+
+
+<!--     <div class="form-container">
+        <h2>Login</h2>
+        <form action="/iPlanner" method="POST">
+            <label for="username">USERNAME</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">PASSWORD:</label>
+            <input type="password" id="password" name="password" required>
+
+            <div class="button-container">
+                <button type="submit">Login</button>
+                <button type="reset">Cancel</button>
+            </div>
+        </form>
+    </div> -->
+

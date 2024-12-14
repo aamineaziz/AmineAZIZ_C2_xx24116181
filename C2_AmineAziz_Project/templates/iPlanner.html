@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to iPlanner</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<section>
+	<div class="iplanner"> 
+		<div class="content">
+			<h2>{{ user }}'s iPlanner</h2><br>
+			<form action="/iPlanner" method="post">
+				<div class="form">
+					<label for="text">What's your ToDo list?</label>
+						<div class="inputBox"> 
+							<input type="text" name="ListTask"> <i>Add Todo...</i>
+						</div>
+								<div class="inputBox"> 
+						<button type="submit">ADD</button>
+					</div>
+					<div class="inputBox"> 
+						<input type="submit" value="Edit"> 
+					</div>
+				</div>
+			</form>
+			<form action="/deleteTask" method="get">
+				<div class="form">
+				<div class="inputBox"> 
+							<button type="submit">DELETE</button>
+						</div>
+			</div>
+			</form>
+			
+			{% if text %}
+				<h3>Your ToDo List</h3>
+				<p>{{text}}</p>
+			{% endif %}
+				<h3>List</h3>
+				<ul>
+					{% for content in contents %} 
+						<li>Task number : {{ content['id'] }} > {{ content['content'] }}</li>
+					{% endfor %}
+				</ul>
+				
+				
+			
+		</div> 
+	</div> 
+ </section>
+	
+		<!-- <script>
+		function addline() {
+  const TText = document.getElementByName("Tinput").value;
+      if (TText == '') return;
+	  const task = document.createElement("List");
+	  task.textContent = TText;
+	  document.getElementById('TList').appendChild(task);
+	  document.getElementById('TInput').value = '';
+}
+		</script> -->
+</body>
+</html>
