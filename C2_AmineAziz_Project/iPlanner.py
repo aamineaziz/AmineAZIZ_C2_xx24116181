@@ -12,13 +12,6 @@ def TaskDB_conn():
 @app.route('/')
 @app.route('/homepage', methods=['GET', 'POST'])
 def index():
-    if 'username' in session:
-        conn = sqlite3.connect('TaskListDB.db', timeout=10.0)
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Tasks')
-        tasks = cursor.fetchall()
-        conn.close()
-        return redirect(url_for('iPlanner', tasks=tasks))
     return render_template('homepage.html')
     
 @app.route('/', methods=['GET', 'POST'])
@@ -47,20 +40,17 @@ def login():
         conn.close()
         
         if user and username == user['username'] and password == user['password']:
-        # session['username']== user['username']:
             resp = make_response(redirect(url_for('iPlanner')))
-            # make_response(redirect(url_for('iPlanner')))
-            resp.set_cookie('user', username, max_age=60*60*24)
+            resp.set_cookie('securedcookie_step1', username, httponly=True, secure=True, samesite='Strict', max_age=60)
             return resp
         else:
              error='invalid'
-             flash(error)# flash('wrong')
-            # #render_template('homepage.html',error=error),error=error
+             flash(error)
     return render_template('homepage.html',error=error)
 
 @app.route('/iPlanner', methods=['GET', 'POST'])
 def iPlanner():
-    user = request.cookies.get('user')
+    user = request.cookies.get('securedcookie_step1')
     task = request.form.get('ListTask')
     if not user:
         return redirect(url_for('login'))
@@ -120,9 +110,12 @@ def deleteAllTasks():
 @app.route('/logout')
 def logout():
     resp = make_response(redirect(url_for('login')))
-    resp.set_cookie('user', expires=0)
+    resp.set_cookie('securedcookie_step1', expires=0)
     return resp
 
 if __name__ == '__main__':
     # init_db()
-    app.run(debug=True, port=5000)
+    # context = ('cert.crt', 'private.key')
+    # app.run(debug=True, ssl_context=context)
+    context='adhoc'
+    app.run(debug=True, ssl_context=context)
