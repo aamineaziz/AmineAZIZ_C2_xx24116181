@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for, make_response
-from html import escape
+from markupsafe import escape
 import sqlite3
 
 app = Flask(__name__)
@@ -9,6 +9,11 @@ def TaskDB_conn():
     conn = sqlite3.connect('TaskListDB.db', timeout=10.0)
     conn.row_factory = sqlite3.Row
     return conn
+
+@app.after_request #enhancement of Content Security Policy
+def apply_csp(resp):
+    response.headers['Content-Security-Policy'] = ( "default-src 'self'; " "img-src 'self' data:; " "font-src 'self'" )
+    return resp
 
 @app.route('/')
 @app.route('/homepage', methods=['GET', 'POST'])
@@ -41,6 +46,7 @@ def login():
         conn.close()
         
         if user and username == user['username'] and password == user['password']:
+            session['secured_session_step2'] = username #secure session
             resp = make_response(redirect(url_for('iPlanner')))
             resp.set_cookie('securedcookie_step1', username, httponly=True, secure=True, samesite='Strict', max_age=60)
             return resp
@@ -51,7 +57,8 @@ def login():
 
 @app.route('/iPlanner', methods=['GET', 'POST'])
 def iPlanner():
-    user = request.cookies.get('securedcookie_step1')
+    sec_session=session.get('secured_session_step2')
+    user = request.cookies.get('securedcookie_step1') #secure session
     task = request.form.get('ListTask')
     secured_task=escape(task) #sanitized
     if not user:

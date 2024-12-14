@@ -32,7 +32,7 @@
 			</div>			
 			{% if text %}
 				<h3>Your ToDo List</h3>
-				<p>{{text}}</p>
+				<p>{{text|safe}}</p> <!-- safe input -->
 			{% endif %}
 				<h3>List</h3>
 				<ul>
