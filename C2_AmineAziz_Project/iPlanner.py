@@ -114,6 +114,9 @@ def logout():
     return resp
 
 if __name__ == '__main__':
+    app.run(debug=True, port=8001)
+
+if __name__ == '__main__':
     # init_db()
     # context = ('cert.crt', 'private.key')
     # app.run(debug=True, ssl_context=context)
