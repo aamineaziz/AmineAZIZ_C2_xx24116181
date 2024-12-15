@@ -3,10 +3,17 @@ from flask_wtf.csrf import CSRFProtect
 from markupsafe import escape
 import sqlite3
 import re
+import logging
 
 csrf = CSRFProtect() #putting in place CSRFProtect
 app = Flask(__name__)
 app.secret_key = 'x1x2x3x4'
+
+logging.basicConfig(filename='iPlanner.log', level=logging.WARNING, #a way to log your activities
+                    format='%(asctime)s - %(message)s')
+                    
+logger = logging.getLogger(__name__)
+
 csrf.init_app(app)
 
 @app.route('/refresh_to_Main', methods=['GET'])
@@ -46,6 +53,7 @@ def login():
         
         if not is_valid(username) or not is_valid(password):
             non_alpha_num_error='Please use alphanumeric characters'
+            logger.warning('Suspicious input detected: %s', non_alpha_num_error) # log in case of error
             flash(non_alpha_num_error)
             return render_template('homepage.html',non_alpha_num_error = non_alpha_num_error)
         
@@ -73,6 +81,7 @@ def iPlanner():
     
     if not is_valid(str(task)):
             non_alpha_num_error='Please use alphanumeric characters'
+            logger.warning('Suspicious input detected: %s', non_alpha_num_error)# log in case of error
             flash(non_alpha_num_error)
             return render_template('iPlanner.html',non_alpha_num_error = non_alpha_num_error)
     
@@ -105,6 +114,7 @@ def newTask(id):
         newTask = request.form.get('ListTask')
         if not is_valid(newTask):
             Update_invalid_error='You tried to Update with invalid characters'
+            logger.warning('Suspicious input detected: %s', Update_invalid_error) # log in case of error
             flash(Update_invalid_error)
             return refresh_to_Main()
         
@@ -144,6 +154,18 @@ def logout():
     resp = make_response(redirect(url_for('login')))
     resp.set_cookie('securedcookie_step1', expires=0)
     return resp
+
+
+@app.errorhandler(500) # Handeling wrong access
+def internal_error(error):
+    logger.error('Server Error: %s', (error))
+    return render_template('500.html'), 500
+
+@app.errorhandler(404) # Handeling wrong access
+def not_found_error(error):
+    logger.error('Page Not Found: %s', (error))
+    return render_template('404.html'), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8001)
