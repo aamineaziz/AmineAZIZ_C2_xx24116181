@@ -4,10 +4,13 @@ from markupsafe import escape
 import sqlite3
 import re
 import logging
+import os
 
 csrf = CSRFProtect() #putting in place CSRFProtect
 app = Flask(__name__)
-app.secret_key = 'x1x2x3x4'
+SECRET_KEY = os.environ["SECRET_KEY"]
+app.secret_key = SECRET_KEY
+
 
 logging.basicConfig(filename='iPlanner.log', level=logging.WARNING, #a way to log your activities
                     format='%(asctime)s - %(message)s')
@@ -98,7 +101,7 @@ def login():
             session['secured_session_step2'] = username #secure session
             resp = make_response(redirect(url_for('iPlanner')))
             resp.set_cookie('securedcookie_step1', username, httponly=True, secure=True, samesite='Strict', max_age=60)
-            resp.set_cookie('role', user['role'], max_age=60) #storing role to user for RBAC verification
+            resp.set_cookie('role', user['role'], httponly=True, secure=True, samesite='Strict', max_age=60) #storing role to user for RBAC verification
             return resp
         else:
              error='Invalid Credentials'
@@ -196,7 +199,7 @@ def deleteAllTasks():
 @app.route('/logout')
 def logout():
     resp = make_response(redirect(url_for('login')))
-    resp.set_cookie('securedcookie_step1', expires=0)
+    resp.set_cookie('securedcookie_step1', httponly=True, secure=True, samesite='Strict',expires=0)
     return resp
 
 
@@ -214,9 +217,9 @@ def not_found_error(error):
 if __name__ == '__main__':
     app.run(debug=True, port=8001)
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # init_db()
     # context = ('cert.crt', 'private.key')
+    # app.run(debug=False, ssl_context=context)
+    # context='adhoc'
     # app.run(debug=True, ssl_context=context)
-    context='adhoc'
-    app.run(debug=True, ssl_context=context)
