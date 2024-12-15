@@ -20,10 +20,16 @@ csrf.init_app(app)
 def refresh_to_Main():
     return redirect(url_for('iPlanner'))
 
-def TaskDB_conn(): 
+def TaskDB_conn(): #database init
     conn = sqlite3.connect('TaskListDB.db', timeout=10.0)
     conn.row_factory = sqlite3.Row
     return conn
+
+def TaskDB_conn_RO(): #database init
+    conn = sqlite3.connect('file:TaskListDB.db?mode=ro', uri=True)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 
 @app.after_request #enhancement of Content Security Policy
 def apply_csp_header(resp):
@@ -101,7 +107,7 @@ def login():
 
 @app.route('/viewOnly', methods=['GET'])
 def viewOnly(): #function to just view content
-    conn = TaskDB_conn()
+    conn = TaskDB_conn_RO()# making the DB read only
     cursor = conn.cursor()
     cursor.execute('SELECT id, content FROM Tasks ORDER BY id DESC;')
     contents = cursor.fetchall()

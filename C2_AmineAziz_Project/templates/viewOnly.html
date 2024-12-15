@@ -11,21 +11,20 @@
 		<div class="content">
 			<h2>Things to do.</h2><br>
 			<div class="form">
-			<form action="/viewOnly" method="post">
-				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
-			</div>			
-				<h3>List</h3>
-				<ul>
+				<form action="/viewOnly" method="post">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
+					<ul>
 					{% for content in contents %} 
 						<li>
 						Task number : {{ content['id'] }} > {{ content['content'] }}
-					</li>
+						</li>
 					{% endfor %}
-				</ul>
-			</form>
+					</ul>
+				</form>
+			</div>
 		</div> 
 	</div> 
- </section>
+</section>
 <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>	
 		<!-- <script>
 		function addline() {
