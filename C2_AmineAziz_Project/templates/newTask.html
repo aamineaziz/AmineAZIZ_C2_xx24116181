@@ -6,20 +6,24 @@
 </head>
 <body>
 <section>
-   <div class="signin">
+   <div class="newTask">
 		<div class="content"> 
-		<form action="/newTask/{{ contents.id }}" method="post">
-			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
-			<div class="form"> 
-			<label for="text">Update the task : {{ contents.id }}</label>
-						<div class="inputBox"> 
-							<input type="text" name="ListTask"> <i>Update Todo...</i>
-						</div>
-								<div class="inputBox"> 
+			<form action="/newTask/{{ contents.id }}" method="post">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
+				<div class="form"> 
+				<label for="text">Update the task : {{ contents.id }}</label>
+					{% if Update_invalid_error %} 
+					<p style="color:red;">{{ Update_invalid_error }}</p>
+					{% endif %}
+					<div class="inputBox"> 
+						<input type="text" name="ListTask"> <i>Edit...</i>
+						<div><br></div>
+					</div>
+					<div class="inputBox1"> 
 						<button type="submit">SAVE</button>
 					</div>
-			</div> 
-		</form>
+				</div> 
+			</form>
 		</div> 
    </div> 
   </section>

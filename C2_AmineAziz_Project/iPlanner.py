@@ -2,12 +2,16 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from flask_wtf.csrf import CSRFProtect
 from markupsafe import escape
 import sqlite3
+import re
 
 csrf = CSRFProtect() #putting in place CSRFProtect
 app = Flask(__name__)
 app.secret_key = 'x1x2x3x4'
 csrf.init_app(app)
 
+@app.route('/refresh_to_Main', methods=['GET'])
+def refresh_to_Main():
+    return redirect(url_for('iPlanner'))
 
 def TaskDB_conn(): 
     conn = sqlite3.connect('TaskListDB.db', timeout=10.0)
@@ -22,6 +26,9 @@ def apply_csp_header(resp):
     resp.headers['X-Content-Type-Options'] = 'nosniff' # protect against sniffing
     return resp
 
+def is_valid(the_input, allowed_cha="^[a-zA-Z0-9_ ]+$"):
+    return bool(re.match(allowed_cha, the_input))
+
 @app.route('/')
 @app.route('/homepage', methods=['GET', 'POST'])
 def index():
@@ -29,13 +36,22 @@ def index():
     
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    error = None    
+    error = None
+    non_alpha_num_error = None
+    Update_invalid_error = None
     if request.method == 'POST':
+        
         username = request.form['username']
         password = request.form['password']
+        
+        if not is_valid(username) or not is_valid(password):
+            non_alpha_num_error='Please use alphanumeric characters'
+            flash(non_alpha_num_error)
+            return render_template('homepage.html',non_alpha_num_error = non_alpha_num_error)
+        
         conn = TaskDB_conn()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Users WHERE username = ? AND password = ?', (username, password))
+        cursor.execute('SELECT * FROM Users WHERE username = ? AND password = ?', (username, password)) # Prevent SQL injection with parametrized sql query
         user = cursor.fetchone()
         conn.close()
         
@@ -45,7 +61,7 @@ def login():
             resp.set_cookie('securedcookie_step1', username, httponly=True, secure=True, samesite='Strict', max_age=60)
             return resp
         else:
-             error='invalid'
+             error='Invalid Credentials'
              flash(error)
     return render_template('homepage.html',error=error)
 
@@ -54,6 +70,14 @@ def iPlanner():
     sec_session=session.get('secured_session_step2')
     user = request.cookies.get('securedcookie_step1') #secure session
     task = request.form.get('ListTask')
+    
+    if not is_valid(str(task)):
+            non_alpha_num_error='Please use alphanumeric characters'
+            flash(non_alpha_num_error)
+            return render_template('iPlanner.html',non_alpha_num_error = non_alpha_num_error)
+    
+    refresh_to_Main()
+    
     secured_task=escape(task) #sanitized
     if not user:
         return redirect(url_for('login'))
@@ -62,7 +86,7 @@ def iPlanner():
         if secured_task:
             conn = TaskDB_conn()
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO Tasks (content) VALUES (?)', (secured_task,))
+            cursor.execute('INSERT INTO Tasks (content) VALUES (?)', (secured_task,)) # Prevent SQL injection with parametrized sql query
             conn.commit()
             conn.close()
     conn = TaskDB_conn()
@@ -79,14 +103,19 @@ def newTask(id):
     
     if request.method == 'POST':
         newTask = request.form.get('ListTask')
+        if not is_valid(newTask):
+            Update_invalid_error='You tried to Update with invalid characters'
+            flash(Update_invalid_error)
+            return refresh_to_Main()
+        
         secured_newtask=escape(newTask) #sanitized
-        cursor.execute('UPDATE Tasks SET content = ? WHERE id = ?', (secured_newtask,id,))
+        cursor.execute('UPDATE Tasks SET content = ? WHERE id = ?', (secured_newtask,id,)) # Prevent SQL injection with parametrized sql query
         conn.commit()
         conn.close()
         return redirect(url_for('iPlanner'))
     conn = TaskDB_conn()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM Tasks WHERE id = ?',(id,))
+    cursor.execute('SELECT * FROM Tasks WHERE id = ?',(id,)) # Prevent SQL injection with parametrized sql query
     contents = cursor.fetchone()
     conn.close()
     return render_template('newTask.html', contents=contents)
@@ -96,7 +125,7 @@ def newTask(id):
 def deleteTask(id):
     conn = TaskDB_conn()
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM Tasks WHERE id = ?', (id,))
+    cursor.execute('DELETE FROM Tasks WHERE id = ?', (id,)) # Prevent SQL injection with parametrized sql query
     conn.commit()
     conn.close()
     return redirect(url_for('iPlanner'))
@@ -105,7 +134,7 @@ def deleteTask(id):
 def deleteAllTasks():
     conn = TaskDB_conn()
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM Tasks')
+    cursor.execute('DELETE FROM Tasks') 
     conn.commit()
     conn.close()
     return redirect(url_for('iPlanner'))

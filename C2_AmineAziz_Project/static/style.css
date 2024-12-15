@@ -26,7 +26,9 @@ section
 	padding: 20px;
 }
 
-section .signin
+section .signin,
+section .iplanner,
+section .newTask
 {
 	width: 90%;
 	max-width: 900px;
@@ -40,7 +42,9 @@ section .signin
 	box-shadow: 0 15px 35px rgba(0,0,0,0.5);
 	margin: 20px 0;
 }
-section .signin .content 
+section .signin .content,
+section .iplanner .content,
+section .newTask .content
 {
 	  position: relative;
 	  width: 100%;
@@ -50,47 +54,31 @@ section .signin .content
 	  flex-direction: column;
 	  gap: 40px;
 }
-section .iplanner
-{
-	width: 90%;
-	max-width: 900px;
-	background: #222;
-	z-index: 1000;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 50px;
-	border-radius: 4px;
-	box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-	margin: 20px 0;
-}
-section .iplanner .content 
-{
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px;
-}
-section .iplanner .content h2 
-{
-  font-size: 3em;
-  color: #fff;
-}
-section .iplanner .content h3 
+
+section .iplanner .content h1,
+section .signin .content h1
 {
   font-size: 2em;
   color: #fff;
-  align-items: center;
-  display: block;
 }
+section .signin .content h3,
+section .iplanner .content h3
+{
+  font-size: 2em;
+  color: #fff;
+}
+section .signin .content h2,
+section .iplanner .content h2
+{
+  font-size: 4em;
+  color: #fff;
+}
+
 p 
 { 
 	font-size: 1em;
 	font-weight: normal;
-	color: #fff;
+	color: red;
 	margin-bottom: 5px;
 	display: block;
 }
@@ -102,59 +90,27 @@ label
 	margin-bottom: 5px;
 	display: block;
 }
-section .iplanner .content .form 
+section .iplanner .content .form,
+section .signin .content .form,
+section .newTask .content .form 
 {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-section .signin .content h2 
-{
-  font-size: 5em;
-  color: #fff;
-}
-section .signin .content .form 
-{
-  width: 100%;
-  display: flex;
-    align-items: center;
-  flex-direction: column;
-  gap: 25px;
-}
-section .iplanner .content .form 
-{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-section .iplanner .content .form .inputBox
-{
-  position: relative;
-  width: 100%;
-}
-section .iplanner .content .form .inputBox button{
-	padding: 10px 20px;
-	background-color: #0f0;
-	align-items: center;
-	font-style: bold;	
-	color: black;
-	position:center;
-	width: 100%;
-	font-weight: 500;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 1em;
-}
-section .iplanner .content .form .inputBox
+
+section .iplanner .content .form .inputBox,
+section .newTask .content .form .inputBox,
+section .iplanner .content .form .inputBox1,
+section .newTask .content .form .inputBox1
 {
   position: relative;
   width: 100%;
 }
 
-section .iplanner .content .form .inputBox1 button{
+section .iplanner .content .form .inputBox1 button
+{
 	padding: 10px 20px;
 	background-color: #fff;
 	font-style: bold;
@@ -167,11 +123,36 @@ section .iplanner .content .form .inputBox1 button{
 	cursor: pointer;
 	font-size: 1em;
 }
-section .iplanner .content .form .inputBox1 button:hover {
+section .iplanner .content .form .inputBox button,
+section .newTask .content .form .inputBox1 button,
+section .newTask .content .form .inputBox button
+{
+	padding: 10px 20px;
+	background-color: #0f0;
+	font-style: bold;
+	align-items: center;
+	color: black;
+	font-weight: 500;
+	width: 100%;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 1em;
+}
+
+section .newTask .content .form .inputBox1 button:hover 
+{
+	background-color: #00c700;
+	color: white;
+	}
+
+section .iplanner .content .form .inputBox1 button:hover 
+{
 	background-color: #c40411;
 	color: white;
 	}
-section .iplanner .content .form .inputBox button:hover {
+section .iplanner .content .form .inputBox button:hover 
+{
 	background-color: #00c700;
 	}
 section .iplanner .content .form .inputBox1
@@ -179,7 +160,6 @@ section .iplanner .content .form .inputBox1
   position: relative;
   width: 100%;
 }
-
 
 section .signin .content .form .inputBox
 {
@@ -199,6 +179,30 @@ section .signin .content .form .inputBox input
   font-weight: 500;
   font-size: 1em;
 }
+
+section .newTask .content .form .inputBox input 
+{
+  position: relative;
+  width: 100%;
+  background: #333;
+  border: none;
+  outline: none;
+  padding: 25px 10px 7.5px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1em;
+}
+section .newTask .content .form .inputBox i 
+{
+  position: absolute;
+  left: 0;
+  padding: 15px 10px;
+  font-style: normal;
+  color: #aaa;
+  transition: 0.5s;
+  pointer-events: none;
+}
 section .signin .content .form .inputBox i 
 {
   position: absolute;
@@ -209,6 +213,14 @@ section .signin .content .form .inputBox i
   transition: 0.5s;
   pointer-events: none;
 }
+.newTask .content .form .inputBox input:focus ~ i,
+.newTask .content .form .inputBox input:valid ~ i
+{
+  transform: translateY(-7.5px);
+  font-size: 0.8em;
+  color: #fff;
+}
+
 .signin .content .form .inputBox input:focus ~ i,
 .signin .content .form .inputBox input:valid ~ i
 {
