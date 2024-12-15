@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to iPlanner</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<section>
+	<div class="iplanner"> 
+		<div class="content">
+			<h2>Things to do.</h2><br>
+			<div class="form">
+			<form action="/viewOnly" method="post">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- putting in place CSRFProtect, we used this method because we didnt use FlaskForm-->
+			</div>			
+				<h3>List</h3>
+				<ul>
+					{% for content in contents %} 
+						<li>
+						Task number : {{ content['id'] }} > {{ content['content'] }}
+					</li>
+					{% endfor %}
+				</ul>
+			</form>
+		</div> 
+	</div> 
+ </section>
+<a href="{{ url_for('logout') }}" class="logout-button">Logout</a>	
+		<!-- <script>
+		function addline() {
+  const TText = document.getElementByName("Tinput").value;
+      if (TText == '') return;
+	  const task = document.createElement("List");
+	  task.textContent = TText;
+	  document.getElementById('TList').appendChild(task);
+	  document.getElementById('TInput').value = '';
+}
+		</script> -->
+</body>
+</html>

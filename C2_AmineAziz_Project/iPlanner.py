@@ -33,6 +33,31 @@ def apply_csp_header(resp):
     resp.headers['X-Content-Type-Options'] = 'nosniff' # protect against sniffing
     return resp
 
+
+# def password_is_valid():
+    # conn = TaskDB_conn()
+    # cursor = conn.cursor()
+    # cursor.execute('SELECT * FROM Users WHERE username = ? AND password = ?', (username, password)) # Prevent SQL injection with parametrized sql query
+    # user = cursor.fetchone()
+    # conn.close()
+    # if user and username == user['username'] and password == user['password']:
+        # session['secured_session_step2'] = username #secure session
+        # resp = make_response(redirect(url_for('iPlanner')))
+        # resp.set_cookie('securedcookie_step1', username, httponly=True, secure=True, samesite='Strict', max_age=60)
+        # return resp
+    # return render_template('homepage.html',error=error)
+
+
+# @app.route('/', methods=['GET', 'POST'])
+# def check_if_valid():
+    # password = request.form['password']
+    # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    # return hashed_password
+
+#did not implement a registration form and didnt have time to add a table that stores hashes to compare to.
+
+
+
 def is_valid(the_input, allowed_cha="^[a-zA-Z0-9_ ]+$"):
     return bool(re.match(allowed_cha, the_input))
 
@@ -67,18 +92,28 @@ def login():
             session['secured_session_step2'] = username #secure session
             resp = make_response(redirect(url_for('iPlanner')))
             resp.set_cookie('securedcookie_step1', username, httponly=True, secure=True, samesite='Strict', max_age=60)
+            resp.set_cookie('role', user['role'], max_age=60) #storing role to user for RBAC verification
             return resp
         else:
              error='Invalid Credentials'
              flash(error)
     return render_template('homepage.html',error=error)
 
+@app.route('/viewOnly', methods=['GET'])
+def viewOnly(): #function to just view content
+    conn = TaskDB_conn()
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, content FROM Tasks ORDER BY id DESC;')
+    contents = cursor.fetchall()
+    conn.close()
+    return render_template('viewOnly.html', contents=contents)
+
 @app.route('/iPlanner', methods=['GET', 'POST'])
 def iPlanner():
     sec_session=session.get('secured_session_step2')
     user = request.cookies.get('securedcookie_step1') #secure session
     task = request.form.get('ListTask')
-    
+    role = request.cookies.get('role')
     if not is_valid(str(task)):
             non_alpha_num_error='Please use alphanumeric characters'
             logger.warning('Suspicious input detected: %s', non_alpha_num_error)# log in case of error
@@ -88,9 +123,12 @@ def iPlanner():
     refresh_to_Main()
     
     secured_task=escape(task) #sanitized
+    
     if not user:
         return redirect(url_for('login'))
-        
+    if role == 'guest': #RBAC based on the guest user that only sees the tasks and cant modify them
+        return redirect(url_for('viewOnly'))
+    
     if request.method == 'POST':
         if secured_task:
             conn = TaskDB_conn()
