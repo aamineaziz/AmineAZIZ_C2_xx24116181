@@ -32,6 +32,7 @@ Before running the iPlanner.py, make sure you have the following installed on yo
     ```
 
 4. Open a browser and navigate to `http://127.0.0.1:8001/` to view the app.
+5. Use Username = admin or Amine and password = root or amine respectively
 
 
 ## Folder Structure

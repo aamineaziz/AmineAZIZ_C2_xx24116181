@@ -8,8 +8,10 @@ import os
 
 csrf = CSRFProtect() #putting in place CSRFProtect
 app = Flask(__name__)
-SECRET_KEY = os.environ["SECRET_KEY"]
-app.secret_key = SECRET_KEY
+app.secret_key = 'x1x2x3x4'
+# SECRET_KEY = os.environ["SECRET_KEY"]
+# app.secret_key = SECRET_KEY
+# this is not added for the sake of the project otherwise the app won't run unless you add the variable in to the os envirement 
 
 
 logging.basicConfig(filename='iPlanner.log', level=logging.WARNING, #a way to log your activities
@@ -217,9 +219,9 @@ def not_found_error(error):
 if __name__ == '__main__':
     app.run(debug=True, port=8001)
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # init_db()
     # context = ('cert.crt', 'private.key')
     # app.run(debug=False, ssl_context=context)
-    # context='adhoc'
-    # app.run(debug=True, ssl_context=context)
+    context='adhoc'
+    app.run(debug=True, ssl_context=context)
